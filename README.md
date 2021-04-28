@@ -24,8 +24,10 @@ The aim of this repository is to make `index.html` of mapbox/storytelling app si
 <script src="https://optgeo.github.io/s/module.js" type="module"></script>
 </body>
 </html>
-
 ```
 
 # Thanks
 - https://github.com/mapbox/storytelling
+
+# Demo
+- https://optgeo.github.io/b3ps1
