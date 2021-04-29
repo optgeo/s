@@ -6,10 +6,6 @@ a storytelling helper
 
 The aim of this repository is to make `index.html` of mapbox/storytelling app simple as below.
 
-## Demo
-
-https://halsk.github.io/s/
-
 ## Examples
 
 ### Add YAML data into html file directly.
@@ -82,4 +78,5 @@ footer: >-
 
 ## Demo
 
-- https://optgeo.github.io/b3ps5
+- https://halsk.github.io/s/
+
