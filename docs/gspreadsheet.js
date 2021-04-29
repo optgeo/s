@@ -4,7 +4,6 @@ export function readGoogleSpreadsheet(url, callback) {
       method: "GET",
     }).then(response => response.text())
     .then(text => {
-      console.log(text);
       var headers = [];
       var data = []
       text.split("\n").forEach((line, idx) => {
@@ -13,7 +12,6 @@ export function readGoogleSpreadsheet(url, callback) {
             headers.push(column.trim())
           })
         } else {
-          console.log(headers)
           var val = {}
           line.split("\t").map((value, idx) => {
             val[[headers[idx]]] = value.trim()
@@ -21,9 +19,6 @@ export function readGoogleSpreadsheet(url, callback) {
           data.push(val)
         }
       })
-      console.log('00000000')
-      console.log(data)
-      console.log('11111111')
       callback(data)
     });
 }
