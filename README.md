@@ -46,6 +46,8 @@ Please create google spreadsheet and publish it as a `tsv` format data by using 
 The spreadsheet should have `title`, `description` and `hash` columns.
 [Example Spreadsheet](https://docs.google.com/spreadsheets/d/1Kt2ZjySNaNfeeiMPLjto1nvH7ue4BoQfuxtZ5c4oZV0/edit#gid=0)
 
+<img src="examples/images/publish.png" width="300"/>
+
 ```html
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title></title>
