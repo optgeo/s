@@ -8,7 +8,7 @@ The aim of this repository is to make `index.html` of mapbox/storytelling app si
 
 ## Demo
 
-https://halsk.github.io/s/
+https://optgeo.github.io/s/
 
 ## Examples
 
