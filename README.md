@@ -71,7 +71,7 @@ footer: >-
 </html>
 ```
 
-[Example](examples/spreadsheet.html)
+[Example](examples/spreadsheet.html) or [Demo](https://optgeo.github.io/b3ps7/)
 
 ## Thanks
 
