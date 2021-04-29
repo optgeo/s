@@ -1,5 +1,12 @@
-import { YAML } from "https://js.sabae.cc/YAML.js";
-import {} from "./storytelling.js";
+import {
+  YAML
+} from "https://js.sabae.cc/YAML.js";
+import {
+  showMap
+} from "./storytelling.js";
+import {
+  readGoogleSpreadsheet
+} from "./gspreadsheet.js";
 
 const addStyleSheet = (href) => {
   const link = document.createElement("link");
@@ -22,7 +29,7 @@ const init = () => {
   const map = document.createElement("div");
   map.id = "map";
   document.body.appendChild(map);
-  
+
   const story = document.createElement("div");
   story.id = "story";
   document.body.appendChild(story);
@@ -32,12 +39,9 @@ init();
 const ALIGNMENT = 'right';
 const ROTATE = true;
 
-const process = (config) => {
-  // config.accessToken = TOKEN;
-  config.theme = 'light';
-  config.showMarkers = false;
+const createChapters = (chapters) => {
   let n = 0;
-  config.chapters.forEach((chapter) => {
+  return chapters.map((chapter) => {
     n += 1;
     chapter.id = `chapter-${n}`;
     chapter.alignment = ALIGNMENT;
@@ -57,8 +61,25 @@ const process = (config) => {
       bearing: r[3],
       pitch: r[4]
     };
+    return chapter;
   });
-  return config;
+}
+
+const process = (config, callback) => {
+  // config.accessToken = TOKEN;
+  config.theme = 'light';
+  config.showMarkers = false;
+  if (typeof config.chapters === 'string') {
+    if (config.chapters.indexOf('https://docs.google.com/spreadsheets/') === 0) {
+      readGoogleSpreadsheet(config.chapters, (chapters) => {
+        config.chapters = createChapters(chapters);
+        callback(config)
+      })
+    }
+  } else {
+    config.chapters = createChapters(config.chapters)
+    callback(config);
+  }
 };
 
 const getYAML = () => {
@@ -74,5 +95,14 @@ const yml = getYAML();
 if (!yml) {
   alert("error: not found YAML");
 } else {
-  window.config = process(YAML.parse(yml));
+  process(YAML.parse(yml), (config) => {
+    window.config = config
+    if (typeof (mapboxgl) !== 'undefined') {
+      showMap(config);
+    } else {
+      window.onload = function () {
+        showMap(config)
+      }
+    }
+  })
 }
