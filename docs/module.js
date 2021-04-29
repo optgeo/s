@@ -1,5 +1,6 @@
 import { YAML } from "https://js.sabae.cc/YAML.js";
-import {} from "./storytelling.js";
+import { showMap } from "./storytelling.js";
+import {} from "./gspreadsheet.js";
 
 const addStyleSheet = (href) => {
   const link = document.createElement("link");
@@ -32,33 +33,40 @@ init();
 const ALIGNMENT = 'right';
 const ROTATE = true;
 
-const process = (config) => {
+const process = (config, callback) => {
+  console.log(config)
   // config.accessToken = TOKEN;
   config.theme = 'light';
   config.showMarkers = false;
   let n = 0;
-  config.chapters.forEach((chapter) => {
-    n += 1;
-    chapter.id = `chapter-${n}`;
-    chapter.alignment = ALIGNMENT;
-    chapter.callback = null;
-    chapter.hidden = false;
-    chapter.mapAnimation = 'flyTo';
-    chapter.rotateAnimation = ROTATE;
-    chapter.onChapterEnter = [];
-    chapter.onChapterExit = [];
-    const r = chapter.hash.split('/');
-    chapter.location = {
-      zoom: r[0],
-      center: [
-        r[2],
-        r[1]
-      ],
-      bearing: r[3],
-      pitch: r[4]
-    };
-  });
-  return config;
+  if (typeof config.chapters === 'string'){
+    if (config.chapters.indexOf('https://docs.google.com/spreadsheets/') === 0) {
+      config.chapters = readGoogleSpreadsheet(config, callback)
+    }
+  } else {
+    config.chapters.forEach((chapter) => {
+      n += 1;
+      chapter.id = `chapter-${n}`;
+      chapter.alignment = ALIGNMENT;
+      chapter.callback = null;
+      chapter.hidden = false;
+      chapter.mapAnimation = 'flyTo';
+      chapter.rotateAnimation = ROTATE;
+      chapter.onChapterEnter = [];
+      chapter.onChapterExit = [];
+      const r = chapter.hash.split('/');
+      chapter.location = {
+        zoom: r[0],
+        center: [
+          r[2],
+          r[1]
+        ],
+        bearing: r[3],
+        pitch: r[4]
+      };
+    });
+    callback(config);
+  }
 };
 
 const getYAML = () => {
@@ -74,5 +82,16 @@ const yml = getYAML();
 if (!yml) {
   alert("error: not found YAML");
 } else {
-  window.config = process(YAML.parse(yml));
+  process(YAML.parse(yml), (config) => {
+    console.log('hoge')
+    console.log(config)
+    window.config = config
+    if (typeof(mapboxgl) !== 'undefined') {
+      showMap(config);
+    }else{
+      window.onload = function() {
+        showMap(config)
+      }
+    }
+  })
 }
