@@ -14,7 +14,6 @@ The aim of this repository is to make `index.html` of mapbox/storytelling app si
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title></title>
 <script type="module" src="https://optgeo.github.io/s/module.js"></script>
-<script type="module" src="https://optgeo.github.io/s/storytelling.js"></script>
 </head>
 <body>
 <script type="text/yaml">
@@ -54,8 +53,6 @@ Then specify the published URL to the `chapters` property on the HTML file.
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title></title>
 <script type="module" src="https://optgeo.github.io/s/module.js"></script>
-<script type="module" src="https://optgeo.github.io/s/storytelling.js"></script>
-<script type="module" src="https://optgeo.github.io/s/gspreadsheet.js"></script>
 </head>
 <body>
 <script type="text/yaml">
@@ -72,6 +69,60 @@ footer: >-
 ```
 
 [Example](examples/spreadsheet.html) or [Demo](https://optgeo.github.io/b3ps7/)
+
+### Import data from CSV file
+
+Please create CSV file
+
+[Example CSV](examples/test.csv)
+
+```html
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title></title>
+<script type="module" src="https://optgeo.github.io/s/module.js"></script>
+</head>
+<body>
+<script type="text/yaml">
+accessToken: pk.eyJ1IjoiaGZ1IiwiYSI6ImlRSGJVUTAifQ.rTx380smyvPc1gUfZv1cmw
+title: 中国地方の自然と産業
+style: https://optgeo.github.io/b3p/style.json
+chapters: ./test.csv
+footer: >-
+  <p>このプロジェクトは、
+  <a href='https://github.com/optgeo'>Adopt Geodata プロジェクト</a>の一環です。</p>
+</script>
+</body>
+</html>
+```
+
+[Example](examples/csv.html)
+
+### Import data from YAML file
+
+Please create YAML file
+
+[Example YAML](examples/test.yml)
+
+```html
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title></title>
+<script type="module" src="https://optgeo.github.io/s/module.js"></script>
+</head>
+<body>
+<script type="text/yaml">
+accessToken: pk.eyJ1IjoiaGZ1IiwiYSI6ImlRSGJVUTAifQ.rTx380smyvPc1gUfZv1cmw
+title: 中国地方の自然と産業
+style: https://optgeo.github.io/b3p/style.json
+chapters: ./test.yml
+footer: >-
+  <p>このプロジェクトは、
+  <a href='https://github.com/optgeo'>Adopt Geodata プロジェクト</a>の一環です。</p>
+</script>
+</body>
+</html>
+```
+
+[Example](examples/yml.html)
 
 ## Thanks
 
