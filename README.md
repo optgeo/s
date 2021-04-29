@@ -38,6 +38,8 @@ footer: >-
 </html>
 ```
 
+[Example](examples/index.html)
+
 ### Import data from Google Spreadsheet
 
 Please create google spreadsheet and publish it as a `tsv` format data by using `File -> Publish to the web`
@@ -64,6 +66,8 @@ footer: >-
 </body>
 </html>
 ```
+
+[Example](examples/spreadsheet.html)
 
 ## Thanks
 
