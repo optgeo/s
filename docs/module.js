@@ -48,7 +48,6 @@ const process = (config) => {
     chapter.onChapterEnter = [];
     chapter.onChapterExit = [];
     const r = chapter.hash.split('/');
-    console.log(n, r);
     chapter.location = {
       zoom: r[0],
       center: [
