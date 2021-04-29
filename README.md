@@ -48,6 +48,8 @@ The spreadsheet should have `title`, `description` and `hash` columns.
 
 <img src="examples/images/publish.png" width="300"/>
 
+Then specify the published URL to the `chapters` property on the HTML file.
+
 ```html
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title></title>
