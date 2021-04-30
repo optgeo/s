@@ -2,6 +2,9 @@ import {
   YAML
 } from "https://js.sabae.cc/YAML.js";
 import {
+  CSV
+} from "https://js.sabae.cc/CSV.js";
+import {
   showMap
 } from "./storytelling.js";
 import {
@@ -65,21 +68,25 @@ const createChapters = (chapters) => {
   });
 }
 
-const process = (config, callback) => {
-  // config.accessToken = TOKEN;
-  config.theme = 'light';
-  config.showMarkers = false;
-  if (typeof config.chapters === 'string') {
-    if (config.chapters.indexOf('https://docs.google.com/spreadsheets/') === 0) {
-      readGoogleSpreadsheet(config.chapters, (chapters) => {
-        config.chapters = createChapters(chapters);
-        callback(config)
-      })
+const process = async (config) => {
+  return new Promise(async (resolve) => {
+    config.theme = 'light';
+    config.showMarkers = false;
+    if (typeof config.chapters === 'string') {
+      const url = config.chapters;
+      if (url.indexOf('https://docs.google.com/spreadsheets/') === 0) {
+        config.chapters = await readGoogleSpreadsheet(url);
+      } else if (url.endsWith(".yml")) {
+        const yml = await (await fetch(url)).text();
+        config.chapters = YAML.parse(yml);
+      } else if (url.endsWith(".csv")) {
+        const csv = await CSV.fetch(url);
+        config.chapters = CSV.toJSON(csv);
+      }
     }
-  } else {
-    config.chapters = createChapters(config.chapters)
-    callback(config);
-  }
+    config.chapters = createChapters(config.chapters);
+    resolve(config)
+  });
 };
 
 const getYAML = () => {
@@ -91,18 +98,19 @@ const getYAML = () => {
   }
   return null;
 };
-const yml = getYAML();
-if (!yml) {
-  alert("error: not found YAML");
-} else {
-  process(YAML.parse(yml), (config) => {
-    window.config = config
-    if (typeof (mapboxgl) !== 'undefined') {
+const main = async () => {
+  const yml = getYAML();
+  if (!yml) {
+    alert("error: not found YAML");
+  } else {
+    const config = await process(YAML.parse(yml));
+    if (typeof mapboxgl !== 'undefined' && typeof scrollama !== 'undefined') {
       showMap(config);
     } else {
-      window.onload = function () {
-        showMap(config)
+      window.onload = () => {
+        showMap(config);
       }
     }
-  })
-}
+  }
+};
+main();
