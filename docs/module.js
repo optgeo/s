@@ -10,6 +10,9 @@ import {
 import {
   readGoogleSpreadsheet
 } from "./gspreadsheet.js";
+import {
+  Geo3x3
+} from "https://taisukef.github.io/Geo3x3/Geo3x3.mjs";
 
 const addStyleSheet = (href) => {
   const link = document.createElement("link");
@@ -43,6 +46,37 @@ const ALIGNMENT = 'right';
 const ROTATE = true;
 
 const createChapters = (chapters) => {
+  const makeLocation = (chapter) => {
+    if (chapter.hash) {
+      const r = chapter.hash.split('/');
+      return {
+        zoom: r[0],
+        center: [
+          r[2],
+          r[1]
+        ],
+        bearing: r[3],
+        pitch: r[4]
+      };
+    } else if (chapter.lat && chapter.lng) {
+      return {
+        zoom: chapter.zoom || 10,
+        center: [chapter.lng, chapter.lat],
+        bearing: chapter.bearing || 0,
+        pitch: chapter.pitch || 0
+      };
+    } else if (chapter.geo3x3) {
+      console.log(chapter.geo3x3);
+      const pos = Geo3x3.decode(chapter.geo3x3);
+      return {
+        zoom: chapter.zoom || 18,
+        center: [pos.lng, pos.lat],
+        bearing: chapter.bearing || 0,
+        pitch: chapter.pitch || 30
+      };
+    }
+    return null;
+  };
   let n = 0;
   return chapters.map((chapter) => {
     n += 1;
@@ -54,16 +88,7 @@ const createChapters = (chapters) => {
     chapter.rotateAnimation = ROTATE;
     chapter.onChapterEnter = [];
     chapter.onChapterExit = [];
-    const r = chapter.hash.split('/');
-    chapter.location = {
-      zoom: r[0],
-      center: [
-        r[2],
-        r[1]
-      ],
-      bearing: r[3],
-      pitch: r[4]
-    };
+    chapter.location = makeLocation(chapter);
     return chapter;
   });
 }
