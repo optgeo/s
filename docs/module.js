@@ -47,7 +47,7 @@ const createChapters = (chapters) => {
   return chapters.map((chapter) => {
     n += 1;
     chapter.id = `chapter-${n}`;
-    chapter.alignment = ALIGNMENT;
+    if (chapter.alignment) {} else { chapter.alignment = ALIGNMENT; }
     chapter.callback = null;
     chapter.hidden = false;
     chapter.mapAnimation = 'flyTo';
