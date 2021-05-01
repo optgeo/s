@@ -145,6 +145,7 @@ accessToken: pk.eyJ1IjoiaGZ1IiwiYSI6ImlRSGJVUTAifQ.rTx380smyvPc1gUfZv1cmw
 title: 中国地方の自然と産業
 style: https://optgeo.github.io/b3p/style.json
 allowExternalSotry: true
+defaultZoom: 19
 chapters: ./test.yml
 footer: >-
   <p>このプロジェクトは、
@@ -155,7 +156,7 @@ footer: >-
 ```
 
 Example  
-[http://optgeo.github.io/s/geturl.html?title=文化財&story=https://raw.githubusercontent.com/optgeo/s/main/examples/remotedata.csv](http://optgeo.github.io/s/geturl.html?title=文化財&story=https://raw.githubusercontent.com/optgeo/s/main/examples/remotedata.csv)
+[http://optgeo.github.io/s/examples/geturl.html?title=文化財&story=https://raw.githubusercontent.com/optgeo/s/main/examples/remotedata.csv](http://optgeo.github.io/s/examples/geturl.html?title=文化財&story=https://raw.githubusercontent.com/optgeo/s/main/examples/remotedata.csv)
 
 ## Thanks
 
