@@ -66,7 +66,6 @@ const createChapters = (chapters, defaultZoom) => {
         pitch: chapter.pitch || 0
       };
     } else if (chapter.geo3x3) {
-      console.log(chapter.geo3x3);
       const pos = Geo3x3.decode(chapter.geo3x3);
       return {
         zoom: chapter.zoom || defaultZoom,
