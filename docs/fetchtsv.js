@@ -1,4 +1,4 @@
-export async function readGoogleSpreadsheet(url) {
+export async function fetchTsv(url) {
   return new Promise(async (resolve) => {
     // fetch google spreadsheet url
     const text = await (await fetch(url)).text();

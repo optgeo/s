@@ -8,8 +8,8 @@ import {
   showMap
 } from "./storytelling.js";
 import {
-  readGoogleSpreadsheet
-} from "./gspreadsheet.js";
+  fetchTsv
+} from "./fetchtsv.js";
 import {
   Geo3x3
 } from "https://taisukef.github.io/Geo3x3/Geo3x3.mjs";
@@ -81,7 +81,9 @@ const createChapters = (chapters) => {
   return chapters.map((chapter) => {
     n += 1;
     chapter.id = `chapter-${n}`;
-    if (chapter.alignment) {} else { chapter.alignment = ALIGNMENT; }
+    if (chapter.alignment) {} else {
+      chapter.alignment = ALIGNMENT;
+    }
     chapter.callback = null;
     chapter.hidden = false;
     chapter.mapAnimation = 'flyTo';
@@ -97,10 +99,17 @@ const process = async (config) => {
   return new Promise(async (resolve) => {
     config.theme = 'light';
     config.showMarkers = false;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (config.allowExternalSotry && urlParams.has('story')) {
+      config.chapters = window.location.search.split('story=')[1]
+      if (urlParams.has('title')) {
+        config.title = urlParams.get('title')
+      }
+    }
     if (typeof config.chapters === 'string') {
       const url = config.chapters;
-      if (url.indexOf('https://docs.google.com/spreadsheets/') === 0) {
-        config.chapters = await readGoogleSpreadsheet(url);
+      if (url.endsWith('.tsv') || url.endsWith('output=tsv')) {
+        config.chapters = await fetchTsv(url);
       } else if (url.endsWith(".yml")) {
         const yml = await (await fetch(url)).text();
         config.chapters = YAML.parse(yml);

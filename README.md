@@ -124,6 +124,39 @@ footer: >-
 
 [Example](examples/yml.html)
 
+### Import data from remote URI
+
+Please add `allowExternalSotry: true` to the YAML config.
+
+[Example CSV](examples/remotedata.csv)
+
+You can read story data by adding a `story` parameter.
+The system will read the data using all parameters after the `story=` occurred.  
+Also, you can set a map title by a `title` parameter.
+
+```html
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title></title>
+<script type="module" src="https://optgeo.github.io/s/module.js"></script>
+</head>
+<body>
+<script type="text/yaml">
+accessToken: pk.eyJ1IjoiaGZ1IiwiYSI6ImlRSGJVUTAifQ.rTx380smyvPc1gUfZv1cmw
+title: 中国地方の自然と産業
+style: https://optgeo.github.io/b3p/style.json
+allowExternalSotry: true
+chapters: ./test.yml
+footer: >-
+  <p>このプロジェクトは、
+  <a href='https://github.com/optgeo'>Adopt Geodata プロジェクト</a>の一環です。</p>
+</script>
+</body>
+</html>
+```
+
+Example  
+[http://optgeo.github.io/s/geturl.html?title=文化財&story=https://raw.githubusercontent.com/optgeo/s/main/examples/remotedata.csv](http://optgeo.github.io/s/geturl.html?title=文化財&story=https://raw.githubusercontent.com/optgeo/s/main/examples/remotedata.csv)
+
 ## Thanks
 
 - https://github.com/mapbox/storytelling
