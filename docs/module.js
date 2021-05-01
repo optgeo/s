@@ -8,8 +8,8 @@ import {
   showMap
 } from "./storytelling.js";
 import {
-  readGoogleSpreadsheet
-} from "./gspreadsheet.js";
+  fetchTsv
+} from "./fetchtsv.js";
 import {
   Geo3x3
 } from "https://taisukef.github.io/Geo3x3/Geo3x3.mjs";
@@ -45,8 +45,8 @@ init();
 const ALIGNMENT = 'right';
 const ROTATE = true;
 
-const createChapters = (chapters) => {
-  const makeLocation = (chapter) => {
+const createChapters = (chapters, defaultZoom) => {
+  const makeLocation = (chapter, defaultZoom) => {
     if (chapter.hash) {
       const r = chapter.hash.split('/');
       return {
@@ -60,7 +60,7 @@ const createChapters = (chapters) => {
       };
     } else if (chapter.lat && chapter.lng) {
       return {
-        zoom: chapter.zoom || 10,
+        zoom: chapter.zoom || defaultZoom,
         center: [chapter.lng, chapter.lat],
         bearing: chapter.bearing || 0,
         pitch: chapter.pitch || 0
@@ -69,7 +69,7 @@ const createChapters = (chapters) => {
       console.log(chapter.geo3x3);
       const pos = Geo3x3.decode(chapter.geo3x3);
       return {
-        zoom: chapter.zoom || 18,
+        zoom: chapter.zoom || defaultZoom,
         center: [pos.lng, pos.lat],
         bearing: chapter.bearing || 0,
         pitch: chapter.pitch || 30
@@ -81,14 +81,16 @@ const createChapters = (chapters) => {
   return chapters.map((chapter) => {
     n += 1;
     chapter.id = `chapter-${n}`;
-    if (chapter.alignment) {} else { chapter.alignment = ALIGNMENT; }
+    if (chapter.alignment) {} else {
+      chapter.alignment = ALIGNMENT;
+    }
     chapter.callback = null;
     chapter.hidden = false;
     chapter.mapAnimation = 'flyTo';
     chapter.rotateAnimation = ROTATE;
     chapter.onChapterEnter = [];
     chapter.onChapterExit = [];
-    chapter.location = makeLocation(chapter);
+    chapter.location = makeLocation(chapter, defaultZoom);
     return chapter;
   });
 }
@@ -97,10 +99,23 @@ const process = async (config) => {
   return new Promise(async (resolve) => {
     config.theme = 'light';
     config.showMarkers = false;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (config.allowExternalSotry && urlParams.has('story')) {
+      config.chapters = window.location.search.split('story=')[1]
+      // specify map title
+      if (urlParams.has('title')) {
+        config.title = urlParams.get('title')
+      }
+      // specify default zoom level
+      if (urlParams.has('zoom')) {
+        config.defaultZoom = parseInt(urlParams.get('zoom'))
+      }
+    }
+    // load data from another file
     if (typeof config.chapters === 'string') {
       const url = config.chapters;
-      if (url.indexOf('https://docs.google.com/spreadsheets/') === 0) {
-        config.chapters = await readGoogleSpreadsheet(url);
+      if (url.endsWith('.tsv') || url.endsWith('output=tsv')) {
+        config.chapters = await fetchTsv(url);
       } else if (url.endsWith(".yml")) {
         const yml = await (await fetch(url)).text();
         config.chapters = YAML.parse(yml);
@@ -109,7 +124,7 @@ const process = async (config) => {
         config.chapters = CSV.toJSON(csv);
       }
     }
-    config.chapters = createChapters(config.chapters);
+    config.chapters = createChapters(config.chapters, config.defaultZoom || 10);
     resolve(config)
   });
 };

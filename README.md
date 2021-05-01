@@ -6,6 +6,36 @@ a storytelling helper
 
 The aim of this repository is to make `index.html` of mapbox/storytelling app simple as below.
 
+## Config
+
+You need to specify story parameters by adding `<script "type=yaml">` tag in your HTML.
+
+| Name               | Mandatory | Type            | Description                                                                                                                                                                 | Sample value                            |
+| ------------------ | --------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| accessToken        | yes       | string          | MapBox access token. You need to set your own token that can be retrieved from [MapBox](https://www.mapbox.com/)                                                            | pk.eyJ1I.....rTx380smyvPc1g             |
+| title              | yes       | string          | Title of the map                                                                                                                                                            | 中国地方の自然と産業                    |
+| style              | yes       | string          | Location of a style JSON of MapBox                                                                                                                                          | https://optgeo.github.io/b3p/style.json |
+| allowExternalSotry | no        | boolean         | Set `true` if viewers can change data by adding URL parameters                                                                                                              | true                                    |
+| defaultZoom        | no        | integer         | Default zoom level that is used when chapters doesn't has zoom level                                                                                                        | 19                                      |
+| chapters           | yes       | string or array | If string data is set, system will load specified data location. If array data is set, system will use the data as chapter data. Please see `Chapters` section for details. | https://optgeo.github.io/s/hoge.csv     |
+| footer             | yes       | string          | HTML strings That will be shown in the page footer                                                                                                                          | Copyright: Optgeo                       |
+
+### Chapters
+
+Chapters are array of location data of stories.  
+Curently, you can specify below parameters.
+
+| Name               | explanation                         |
+| ------------------ | ----------------------------------- |
+| title              | title of the location               |
+| description        | data description                    |
+| hash               | `zoom/lat/lng/bearing/pitch` format |
+| lat,lng            | lat, lng location                   |
+| chapter.geo3x3     | geo3x3 formatted location           |
+| zoom: chapter.zoom | zoom level                          |
+| bearing            | bearing                             |
+| pitch              | pitch                               |
+
 ## Examples
 
 ### Add YAML data into html file directly.
@@ -124,6 +154,40 @@ footer: >-
 
 [Example](examples/yml.html)
 
+### Import data from remote URI
+
+Please add `allowExternalSotry: true` to the YAML config.
+
+[Example CSV](examples/remotedata.csv)
+
+You can read story data by adding a `story` parameter.
+The system will read the data using all parameters after the `story=` occurred.  
+Also, you can set a map title by a `title` parameter.
+
+```html
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title></title>
+<script type="module" src="https://optgeo.github.io/s/module.js"></script>
+</head>
+<body>
+<script type="text/yaml">
+accessToken: pk.eyJ1IjoiaGZ1IiwiYSI6ImlRSGJVUTAifQ.rTx380smyvPc1gUfZv1cmw
+title: 中国地方の自然と産業
+style: https://optgeo.github.io/b3p/style.json
+allowExternalSotry: true
+defaultZoom: 19
+chapters: ./test.yml
+footer: >-
+  <p>このプロジェクトは、
+  <a href='https://github.com/optgeo'>Adopt Geodata プロジェクト</a>の一環です。</p>
+</script>
+</body>
+</html>
+```
+
+Example  
+[http://optgeo.github.io/s/examples/geturl.html?title=文化財&story=https://raw.githubusercontent.com/optgeo/s/main/examples/remotedata.csv](http://optgeo.github.io/s/examples/geturl.html?title=文化財&story=https://raw.githubusercontent.com/optgeo/s/main/examples/remotedata.csv)
+
 ## Thanks
 
 - https://github.com/mapbox/storytelling
@@ -133,4 +197,3 @@ footer: >-
 ## Demo
 
 - https://optgeo.github.io/s/
-
