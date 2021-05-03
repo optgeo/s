@@ -44,6 +44,7 @@ init();
 
 const ALIGNMENT = 'right';
 const ROTATE = true;
+const PITCH = 60.0;
 
 const createChapters = (chapters, defaultZoom) => {
   const makeLocation = (chapter, defaultZoom) => {
@@ -55,15 +56,15 @@ const createChapters = (chapters, defaultZoom) => {
           r[2],
           r[1]
         ],
-        bearing: r[3],
-        pitch: r[4]
+        bearing: r[3] || 0,
+        pitch: r[4] || PITCH
       };
     } else if (chapter.lat && chapter.lng) {
       return {
         zoom: chapter.zoom || defaultZoom,
         center: [chapter.lng, chapter.lat],
         bearing: chapter.bearing || 0,
-        pitch: chapter.pitch || 0
+        pitch: chapter.pitch || PITCH
       };
     } else if (chapter.geo3x3) {
       const pos = Geo3x3.decode(chapter.geo3x3);
@@ -71,7 +72,7 @@ const createChapters = (chapters, defaultZoom) => {
         zoom: chapter.zoom || defaultZoom,
         center: [pos.lng, pos.lat],
         bearing: chapter.bearing || 0,
-        pitch: chapter.pitch || 30
+        pitch: chapter.pitch || PITCH
       };
     }
     return null;
@@ -80,7 +81,7 @@ const createChapters = (chapters, defaultZoom) => {
   return chapters.map((chapter) => {
     n += 1;
     chapter.id = `chapter-${n}`;
-    if (chapter.alignment) {} else {
+    if (!chapter.alignment) {
       chapter.alignment = ALIGNMENT;
     }
     chapter.callback = null;
