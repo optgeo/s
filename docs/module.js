@@ -1,9 +1,9 @@
 import {
   YAML
-} from "https://js.sabae.cc/YAML.js";
+} from "https://code4sabae.github.io/js/YAML.js";
 import {
   CSV
-} from "https://js.sabae.cc/CSV.js";
+} from "https://code4sabae.github.io/js/CSV.js";
 import {
   showMap
 } from "./storytelling.js";
