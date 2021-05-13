@@ -2,6 +2,9 @@ import {
   YAML
 } from "https://code4sabae.github.io/js/YAML.js";
 import {
+  TOML
+} from "https://taisukef.github.io/toml-es/TOML.js";
+import {
   CSV
 } from "https://code4sabae.github.io/js/CSV.js";
 import {
@@ -119,6 +122,9 @@ const process = async (config) => {
       } else if (url.endsWith(".yml")) {
         const yml = await (await fetch(url)).text();
         config.chapters = YAML.parse(yml);
+      } else if (url.endsWith(".toml")) {
+        const yml = await (await fetch(url)).text();
+        config.chapters = TOML.parse(yml);
       } else if (url.endsWith(".csv")) {
         const csv = await CSV.fetch(url);
         config.chapters = CSV.toJSON(csv);
