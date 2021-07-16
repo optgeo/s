@@ -196,4 +196,4 @@ Example
 
 ## Demo
 
-- https://optgeo.github.io/s/
+- https://optgeo.github.io/s/examples 
