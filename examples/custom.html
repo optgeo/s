@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>さばぷら地図がたり</title>
+</head>
+<body>
+<script type="module">
+//import { showMap, createChapters } from "https://optgeo.github.io/s/system.js";
+import { showMap, createChapters } from "../docs/system.js";
+
+const accessToken = "pk.eyJ1IjoiZ2VvcmVwdWJsaWMiLCJhIjoiY2tvMm53aWsxMTFiajJycGdyOXR4MW9iMiJ9.h7aSUinQuXd8EFRSWJvBPQ";
+
+onload = async () => {
+  //const url = "data.json";
+  const url = "https://sabapura.com/data.json";
+  const data = await (await fetch(url)).json();
+  const config = {
+    title: "さばぷら地図がたり",
+    accessToken,
+    style: "https://optgeo.github.io/b3p/style.json",
+    footer: "<p>このプロジェクトは、<a href='https://github.com/optgeo'>Adopt Geodata プロジェクト</a>の一環です。</p>",
+    theme: "light",
+  };
+  let idx = 0;
+  const data2 = data.map((d) => {
+    const res = {
+      title: d.name,
+      image: d.top.topImage.url,
+      description: (d.text || "") + (d.shop_name && d.name != d.shop_name ? "<br>" + d.shop_name : "") + "<br><a href=https://sabapura.com/event/" + d.id + ">さばぷらサイトへ</a>",
+      geo3x3: d.geo3x3,
+      bearing: idx++ * 30,
+    };
+    return res;
+  });
+  config.chapters = createChapters(data2, 18);
+  showMap(config);
+};
+</script>
+</body>
+</html>
